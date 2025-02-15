@@ -1,6 +1,5 @@
 import expenseModel from "../models/expenseModel.js";
 
-
 export const createExpense = async (req, res) => {
     try {
 
@@ -15,6 +14,8 @@ export const createExpense = async (req, res) => {
             expenseAmount: amount
         })
 
+        createdExpense=await createdExpense.populate('budgetId');
+
         return res.status(200).json({ success: true, message: "Expense created", data: createdExpense });
 
     } catch (er) {
@@ -25,11 +26,11 @@ export const createExpense = async (req, res) => {
 export const getExpense = async (req, res) => {
     try {
 
-        let { budgetId } = req.params;
+        let { id } = req.params;
 
-        if (!budgetId) return res.status(401).json({ success: false, message: "Id is not provided" });
+        if (!id) return res.status(401).json({ success: false, message: "Id is not provided" });
 
-        let expense = await expenseModel.find({ budgetId }).populate('budgetId');
+        let expense = await expenseModel.find({ budgetId:id }).populate('budgetId');
 
         return res.status(200).json({ success: true, data: expense });
 
@@ -56,6 +57,8 @@ export const updateExpense = async (req, res) => {
             expense.expenseAmount = amount
         }
 
+        expense=await expense.populate('budgetId');
+
         let updatedExpense = await expense.save();
 
         return res.status(200).json({ success: true, message: "Expense Update", data: updatedExpense });
@@ -69,7 +72,7 @@ export const updateExpense = async (req, res) => {
 export const deleteExpense = async (req, res) => {
     try {
 
-        let { id } = req.body;
+        let { id } = req.params;
 
         if (!id) return res.status(401).json({ success: false, message: "Id is not provided" });
 

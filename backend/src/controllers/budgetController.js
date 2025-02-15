@@ -75,8 +75,9 @@ export const deleteBudget = async (req, res) => {
 
         let { id } = req.params
 
-
         if (!id) return res.status(401).json({ success: false, message: "Id not provided" });
+
+        await expenseModel.deleteMany({budgetId:id});
 
         await budgetModel.findByIdAndDelete(id);
 

@@ -1,12 +1,16 @@
-import React from 'react'
-import toast from 'react-hot-toast';
+import {toast} from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
+import { setToken, setUserData } from '../../slices/authSlice';
 
 const Navbar = () => {
 
   const navigate=useNavigate();
+  const dispatch=useDispatch();
 
   const handleLogout=()=>{
+       dispatch(setToken(null));
+       dispatch(setUserData(null));
        localStorage.removeItem('token');
        localStorage.removeItem('user');
        navigate('/login');

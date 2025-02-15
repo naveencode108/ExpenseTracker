@@ -3,23 +3,22 @@ import { GrAdd } from "react-icons/gr";
 import BudgetCard from '../common/BudgetCard';
 import AddBudget from '../common/AddBudget';
 import { getBudget } from '../../services/budget/budgetApi';
-
+import {useDispatch, useSelector} from 'react-redux';
+import { setBudget } from '../../slices/budgetSlice';
 
 const Budget = () => {
 
   const [openAdd, setOpenAdd] = useState(false);
-  const user=JSON.parse(localStorage.getItem('user'));
-  const token=localStorage.getItem('token');
-
-  const [budget,setBudget]=useState(null);
+  const {budgetData}=useSelector(state=>state.budget);
+  const {token}=useSelector(state=>state.auth);
+  const dispatch=useDispatch();
 
   useEffect(()=>{
 
     const fetchBudget=async()=>{
          let res=await getBudget(token);
-         console.log(res);
          if(res?.data?.success){
-           setBudget(res.data.data);
+           dispatch(setBudget(res.data.data));
          }
     }
     fetchBudget();
@@ -34,8 +33,8 @@ const Budget = () => {
           <button onClick={() => setOpenAdd(true)} className='w-80 hover:shadow-xl cursor-pointer h-40 bg-sky-200 backdrop-blur-md rounded-lg flex items-center justify-center'>
             <GrAdd size={40} />
           </button>
-          {budget&&budget?.map((item,index)=>(
-          <BudgetCard key={index} data={item}/>
+          {budgetData&&budgetData?.map((item,index)=>(
+             <BudgetCard key={index} data={item}/>
           ))}
         </div>
       </div>

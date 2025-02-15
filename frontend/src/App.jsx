@@ -6,6 +6,7 @@ import DashboardOverview from './components/layouts/DashboardOverview';
 import Budget from './components/layouts/Budget';
 import Expense from './components/layouts/Expense';
 import Signup from './pages/Signup';
+import BudgetOverView from './components/common/BudgetOverView';
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
         <Route element={<Dashboard />} >
           <Route path='/dashboard' element={<DashboardOverview/>}/>
           <Route path='/budget' element={<Budget/>}/>
+          <Route path='/budget/:id' element={<BudgetOverView/>}/>
           <Route path='/expense' element={<Expense/>}/>
         </Route>
 

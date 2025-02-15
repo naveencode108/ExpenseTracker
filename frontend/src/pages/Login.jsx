@@ -4,9 +4,12 @@ import { googleLogin, login } from '../services/auth/authApi';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
+import {useDispatch} from 'react-redux';
+import { setToken, setUserData } from '../slices/authSlice';
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch=useDispatch();
 
     const { handleSubmit, register, formState: { errors } } = useForm();
 
@@ -16,8 +19,9 @@ const Login = () => {
             if (authRes?.credential) {
                 let googleToken = authRes.credential;
                 let res = await googleLogin(googleToken)
-                console.log(res);
                 if (res?.data?.success) {
+                    dispatch(setToken(res.data.clientToken));
+                    dispatch(setUserData(res.data.data));
                     localStorage.setItem('token', res.data.clientToken);
                     localStorage.setItem('user', JSON.stringify(res.data.data));
                     navigate('/dashboard');
@@ -42,9 +46,10 @@ const Login = () => {
             if (res?.data?.success) {
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('user', JSON.stringify(res.data.data));
+                dispatch(setToken(res.data.token));
+                dispatch(setUserData(res.data.data));
                 navigate('/');
                 toast.success(res.data.message);
-                
             }
             else {
                 toast.error(res.data.message);

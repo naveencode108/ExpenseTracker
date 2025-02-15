@@ -1,6 +1,6 @@
 import BudgetForm from './BudgetForm';
 
-const AddBudget = ({ onClose }) => {
+const EditBudget = ({ onClose,data }) => {
 
     return (
         <div className="fixed inset-0 z-40 flex items-center justify-center backdrop-blur-sm bg-opacity-50">
@@ -13,11 +13,11 @@ const AddBudget = ({ onClose }) => {
                     X
                 </button>
 
-                <h1 className="text-2xl font-bold mb-4 text-center">Add Budget</h1>
-                <BudgetForm type={'ADD'} onClose={onClose}/>
+                <h1 className="text-2xl font-bold mb-4 text-center">Edit Budget</h1>
+                <BudgetForm type={'EDIT'} cardData={data} onClose={onClose}/>
             </div>
         </div>
     );
 };
 
-export default AddBudget;
+export default EditBudget;
