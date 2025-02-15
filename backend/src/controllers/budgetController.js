@@ -1,5 +1,6 @@
 import budgetModel from "../models/budgetModel.js";
 import jwt from 'jsonwebtoken'
+import expenseModel from "../models/expenseModel.js";
 
 export const createBudget = async (req, res) => {
     try {

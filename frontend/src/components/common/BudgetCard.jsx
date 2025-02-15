@@ -15,7 +15,6 @@ const BudgetCard = ({ data }) => {
      const dispatch=useDispatch();
 
     const handleDelete=async(id)=>{
-         try {
             let res=await deleteBudget(id);
 
             if(res?.data?.success){
@@ -24,13 +23,8 @@ const BudgetCard = ({ data }) => {
                toast.success(res.data.message);
             }
             else{
-                toast.error(res.data.message);
+                toast.error(res?.message);
             }
-
-         } catch (er) {
-             console.log(er)
-            toast.error(er.message);
-         }
     }
 
     return (

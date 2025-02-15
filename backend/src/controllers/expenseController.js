@@ -1,4 +1,5 @@
 import expenseModel from "../models/expenseModel.js";
+import userModel from '../models/userModel.js';
 
 export const createExpense = async (req, res) => {
     try {
@@ -14,7 +15,7 @@ export const createExpense = async (req, res) => {
             expenseAmount: amount
         })
 
-        createdExpense=await createdExpense.populate('budgetId');
+        createdExpense = await createdExpense.populate('budgetId');
 
         return res.status(200).json({ success: true, message: "Expense created", data: createdExpense });
 
@@ -30,7 +31,7 @@ export const getExpense = async (req, res) => {
 
         if (!id) return res.status(401).json({ success: false, message: "Id is not provided" });
 
-        let expense = await expenseModel.find({ budgetId:id }).populate('budgetId');
+        let expense = await expenseModel.find({ budgetId: id }).populate('budgetId');
 
         return res.status(200).json({ success: true, data: expense });
 
@@ -57,7 +58,7 @@ export const updateExpense = async (req, res) => {
             expense.expenseAmount = amount
         }
 
-        expense=await expense.populate('budgetId');
+        expense = await expense.populate('budgetId');
 
         let updatedExpense = await expense.save();
 
@@ -89,14 +90,12 @@ export const deleteExpense = async (req, res) => {
 export const getUserAllExpense = async (req, res) => {
     try {
 
-        let {userId}=req.body;
+        let userId = req.userId;
+        
+        if (!userId)  return res.status(401).json({ success: false, message: "User id is not provided" }) ;
 
-        if(!userId) return res.status(401).json({success:false,message:"User id is not provided"});
-
-        let expense=await expenseModel.find({userId});
-
-        return res.status(200).json({success:true,data:expense});
-
+        let expense = await expenseModel.find({ userId });        
+        return res.status(200).json({ success: true, data: expense });
     } catch (er) {
         return res.status(500).json({ success: false, message: er.message });
     }

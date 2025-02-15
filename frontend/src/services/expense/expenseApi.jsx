@@ -46,3 +46,19 @@ export const getExpense = async (id) => {
         return { success: false, message: er?.response?.data?.message }
     }
 }
+
+export const getAllExpense = async (token) => {
+    try {
+       
+        let headers={
+            Authorization:`Bearer${token}`
+        }
+
+        let result=await apiCall('GET','/api/expense',headers);
+        return result;
+     
+
+    } catch (er) {
+        return { success: false, message:er.response?er?.response?.data?.message:er.message }
+    }
+}
