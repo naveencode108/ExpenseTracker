@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import DashboardOverview from './components/layouts/DashboardOverview';
 import Budget from './components/layouts/Budget';
 import Expense from './components/layouts/Expense';
+import Signup from './pages/Signup';
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
       <Routes>
 
         <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
         <Route path='/' element={<Navigate to='/dashboard' />} />
 
         <Route element={<Dashboard />} >

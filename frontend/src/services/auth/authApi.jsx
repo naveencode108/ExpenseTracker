@@ -16,16 +16,27 @@ export const googleLogin = async (googleToken) => {
     }
 }
 
-export const login = async () => {
+export const login = async (data) => {
     try {
+        
+        let result;
+       
+        result = await apiCall('POST', '/api/auth/login',null,data);
+        return result;
+
 
     } catch (er) {
         return { success: false, message: er?.response?.data?.message }
     }
 }
 
-export const signup = async () => {
+export const signup = async (data) => {
     try {
+
+        let result;
+       
+        result = await apiCall('POST', '/api/auth/signup',null,data);
+        return result;
 
     } catch (er) {
         return { success: false, message: er?.response?.data?.message }

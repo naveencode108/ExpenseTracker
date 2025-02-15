@@ -1,5 +1,5 @@
 import budgetModel from "../models/budgetModel.js";
-
+import jwt from 'jsonwebtoken'
 
 export const createBudget = async (req, res) => {
     try {
@@ -27,10 +27,11 @@ export const createBudget = async (req, res) => {
 
 export const getBudget = async (req, res) => {
     try {
+        let token = req.headers.authorization.replace('Bearer', '');
 
-        let { userId } = req.body;
+        let { id } = jwt.verify(token, process.env.JWT_SECRET);
 
-        let budget = await budgetModel.find({ userId });
+        let budget = await budgetModel.find({ userId: id });
 
         return res.status(200).json({ success: true, data: budget });
 
@@ -43,8 +44,8 @@ export const getBudget = async (req, res) => {
 export const updateBudget = async (req, res) => {
     try {
 
-        let {id}=req.params
-        let {name, amount } = req.body;
+        let { id } = req.params
+        let { name, amount } = req.body;
 
         if (!id) return res.status(401).json({ success: false, message: "BudgetId is not provided " })
 
@@ -72,14 +73,14 @@ export const updateBudget = async (req, res) => {
 export const deleteBudget = async (req, res) => {
     try {
 
-        let {id}=req.params
+        let { id } = req.params
 
 
-        if(!id) return res.status(401).json({success:false,message:"Id not provided"});
+        if (!id) return res.status(401).json({ success: false, message: "Id not provided" });
 
         await budgetModel.findByIdAndDelete(id);
 
-        return res.status(200).json({success:true,message:"Budget Deleted"});
+        return res.status(200).json({ success: true, message: "Budget Deleted" });
 
     } catch (er) {
         return res.status(500).json({ success: false, message: er.message });
