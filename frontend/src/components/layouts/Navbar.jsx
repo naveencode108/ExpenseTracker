@@ -18,7 +18,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className='w-full bg-gray-100 py-3 flex justify-between items-center px-7 '>
+    <div className='w-full bg-gray-200 py-3 flex justify-between items-center px-7 border-b-[1px]'>
       <h1 className='text-3xl'>ExpensER</h1>
       <button onClick={handleLogout} className='px-3 py-1 rounded-lg bg-sky-500 text-white cursor-pointer'>Logout</button>
     </div> 

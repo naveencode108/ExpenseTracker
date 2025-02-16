@@ -17,7 +17,7 @@ const Sidebar = () => {
   ]
 
   return (
-    <div className='w-50 transition-all ease-linear md:w-60 h-full bg-gray-100 text-black px-4 py-5'>
+    <div className='w-50 transition-all ease-linear md:w-60 h-full bg-gray-200 text-black px-4 py-5'>
       <div>
         {sideData.map((item, index) => (
           <Link className='text-lg cursor mb-4 hover:bg-gradient-to-l transition-all ease-in-out bg-gradient-to-r from-orange-200 to-violet-300 rounded-lg py-3 px-3 flex items-center' to={item.path} key={index}>

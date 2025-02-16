@@ -32,9 +32,9 @@ const BudgetCard = ({ data }) => {
             {open &&
                 <EditBudget onClose={() => setOpen(false)} data={data}/>
             }
-            <div className='relative w-80 h-40 rounded-lg bg-gray-200 hover:shadow-xl'>
+            <div className='relative w-full h-40 rounded-lg bg-gray-200 hover:shadow-xl lg:w-80 '>
                 <Link to={`/budget/${data._id}`} className='block h-full'>
-                    <div className='py-3 px-3 h-full'>
+                    <div className='py-3 px-3 h-full space-y-1'>
                         <div className='flex justify-between items-center py-4'>
                             <div className='size-12 rounded-full bg-red-400 overflow-hidden p-1'>
                                 <img src="#" alt="Budget Icon" className="object-cover w-full h-full" />
@@ -42,7 +42,13 @@ const BudgetCard = ({ data }) => {
                             <h1 className='text-lg font-semibold capitalize'>{data.name}</h1>
                             <h1 className='text-lg font-semibold'>${data.amount}</h1>
                         </div>
-                        <div className='border mt-2'>Additional details here</div>
+                        <div>
+                           <div className='flex justify-between text-sm px-3'>
+                             <p>$0</p>
+                             <p>${data.amount}</p>
+                           </div>
+                          <progress className="progress progress-success " value="200" max={data.amount}></progress>
+                        </div>
                     </div>
                 </Link>
                 <div className="absolute top-2 right-2 flex space-x-2">

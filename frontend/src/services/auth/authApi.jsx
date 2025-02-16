@@ -18,10 +18,10 @@ export const googleLogin = async (googleToken) => {
 
 export const login = async (data) => {
     try {
-        
+
         let result;
-       
-        result = await apiCall('POST', '/api/auth/login',null,data);
+
+        result = await apiCall('POST', '/api/auth/login', null, data);
         return result;
 
 
@@ -34,11 +34,27 @@ export const signup = async (data) => {
     try {
 
         let result;
-       
-        result = await apiCall('POST', '/api/auth/signup',null,data);
+
+        result = await apiCall('POST', '/api/auth/signup', null, data);
         return result;
 
     } catch (er) {
         return { success: false, message: er?.response?.data?.message }
+    }
+}
+
+
+export const dashboardOverview = async (token) => {
+    try {
+
+        let headers = {
+            Authorization: `Bearer${token}`
+        }
+
+        let result = await apiCall('GET', '/api/auth/dashboard_overview', headers);
+        return result;
+
+    } catch (er) {
+        return { success: false, message: er?.response?.data?.message };
     }
 }

@@ -8,7 +8,7 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem('user'));
 
   return (
-    <div className='w-full h-[calc(100vh-60px)]'>
+    <div className='w-full h-[calc(100vh-60px)] text-black'>
       <Navbar />
       <div className='w-full h-full flex gap-1'>
         <Sidebar />

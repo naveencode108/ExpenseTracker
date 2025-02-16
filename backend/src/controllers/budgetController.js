@@ -28,15 +28,42 @@ export const createBudget = async (req, res) => {
 
 export const getBudget = async (req, res) => {
     try {
-        let token = req.headers.authorization.replace('Bearer', '');
+        let userId = req.userId;
+        let budget = await budgetModel.find({ userId });
+        let exp = await expenseModel.aggregate([
+            { $match: { budgetId: { $in: budget.map(item => item._id) } } },
+            {
+                $group: {
+                    _id: '$budgetId',
+                    totalExpense: { $sum: '$expenseAmount' },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'budgets',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'budgetDetails'
+                }
+            },
+            {
+                $unwind: '$budgetDetails'
+            },
+            {
+                $project: {
+                    _id: 0,
+                    budgetId: '$_id',
+                    totalExpense: 1,
+                    budgetDetails: 1,
+                    count:1
+                }
+            }
+        ]);
 
-        let { id } = jwt.verify(token, process.env.JWT_SECRET);
-
-        let budget = await budgetModel.find({ userId: id });
+        console.log(exp);
 
         return res.status(200).json({ success: true, data: budget });
-
-
     } catch (er) {
         return res.status(500).json({ success: false, message: er.message });
     }
@@ -78,7 +105,7 @@ export const deleteBudget = async (req, res) => {
 
         if (!id) return res.status(401).json({ success: false, message: "Id not provided" });
 
-        await expenseModel.deleteMany({budgetId:id});
+        await expenseModel.deleteMany({ budgetId: id });
 
         await budgetModel.findByIdAndDelete(id);
 

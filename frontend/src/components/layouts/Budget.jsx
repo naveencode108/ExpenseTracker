@@ -25,6 +25,7 @@ const Budget = () => {
 
   },[]);
 
+
   return (
     <>
       {openAdd && <AddBudget  onClose={()=>setOpenAdd(false)}/>}

@@ -1,7 +1,9 @@
 import userModel from '../models/userModel.js'
+import budgetModel from '../models/budgetModel.js'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { verifyGoogleToken } from '../config/googleTokenDecode.js';
+import expenseModel from '../models/expenseModel.js';
 
 export const googleLogin = async (req, res) => {
     try {
@@ -9,7 +11,7 @@ export const googleLogin = async (req, res) => {
         let token = req.headers.authorization.replace('Bearer', '');
         if (!token) return res.status(400).json({ success: false, message: "Token is not provided" });
 
-        let { name, email, picture} = await verifyGoogleToken(token)
+        let { name, email, picture } = await verifyGoogleToken(token)
 
         let user = await userModel.findOne({ email });
 
@@ -96,3 +98,30 @@ export const signupUser = async (req, res) => {
     }
 }
 
+export const dashboardOverview = async (req, res) => {
+    try {
+
+        let userId = req.userId;
+
+        let budgetCount = await budgetModel.countDocuments({ userId });
+
+        let budgetTotalAmount = (await budgetModel.find({ userId })).reduce((acc, it) => {
+            return acc + it.amount;
+        }, 0)
+
+        let totalExpense = (await expenseModel.find({ userId })).reduce((acc, it) => {
+            return acc + it.expenseAmount;
+        }, 0);
+
+        return res.status(200).json({
+            success: true, data: [
+                { name: "Total Budget", value: budgetCount },
+                { name: "Total Expense", value: totalExpense },
+                { name: "Total No Of Budget", value: budgetTotalAmount }
+            ]
+        });
+
+    } catch (er) {
+        return res.status(500).json({ success: false, message: er.message });
+    }
+}
