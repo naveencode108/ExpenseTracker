@@ -30,40 +30,54 @@ export const getBudget = async (req, res) => {
     try {
         let userId = req.userId;
         let budget = await budgetModel.find({ userId });
-        let exp = await expenseModel.aggregate([
-            { $match: { budgetId: { $in: budget.map(item => item._id) } } },
-            {
-                $group: {
-                    _id: '$budgetId',
-                    totalExpense: { $sum: '$expenseAmount' },
-                    count: { $sum: 1 }
-                }
+
+        const budgetDetails = await budgetModel.aggregate([
+            { 
+              $match: { _id: { $in: budget.map(item => item._id) } } 
             },
             {
-                $lookup: {
-                    from: 'budgets',
-                    localField: '_id',
-                    foreignField: '_id',
-                    as: 'budgetDetails'
-                }
+              $lookup: {
+                from: 'expenses',
+                let: { budgetId: "$_id" },
+                pipeline: [
+                  { 
+                    $match: { 
+                      $expr: { $eq: ["$budgetId", "$$budgetId"] } 
+                    } 
+                  },
+                  { 
+                    $group: {
+                      _id: null,
+                      totalExpense: { $sum: "$expenseAmount" },
+                      count: { $sum: 1 }
+                    } 
+                  }
+                ],
+                as: 'expenseSummary'
+              }
             },
             {
-                $unwind: '$budgetDetails'
+              $unwind: {
+                path: "$expenseSummary",
+                preserveNullAndEmptyArrays: true
+              }
             },
             {
-                $project: {
-                    _id: 0,
-                    budgetId: '$_id',
-                    totalExpense: 1,
-                    budgetDetails: 1,
-                    count:1
-                }
+              $addFields: {
+                totalExpense: { $ifNull: ["$expenseSummary.totalExpense",'$amount'] },
+                count: { $ifNull: ["$expenseSummary.count", 0] }
+              }
+            },
+            {
+              $project: {
+                expenseSummary: 0
+              }
             }
-        ]);
+          ]);
 
-        console.log(exp);
-
-        return res.status(200).json({ success: true, data: budget });
+          console.log(budgetDetails);
+          
+        return res.status(200).json({ success: true, data: budgetDetails });
     } catch (er) {
         return res.status(500).json({ success: false, message: er.message });
     }
