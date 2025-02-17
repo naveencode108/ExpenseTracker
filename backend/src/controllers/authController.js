@@ -115,9 +115,9 @@ export const dashboardOverview = async (req, res) => {
 
         return res.status(200).json({
             success: true, data: [
-                { name: "Total Budget", value: budgetCount },
+                { name: "Total Budget Amount", value:budgetTotalAmount},
                 { name: "Total Expense", value: totalExpense },
-                { name: "Total No Of Budget", value: budgetTotalAmount }
+                { name: "Total No. Of Budget", value: budgetCount }
             ]
         });
 

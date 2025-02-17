@@ -26,7 +26,6 @@ const BudgetCard = ({ data }) => {
             toast.error(res?.message);
         }
     }
-
     return (
         <>
             {open &&
@@ -35,22 +34,20 @@ const BudgetCard = ({ data }) => {
             <div className='relative w-full h-40 rounded-lg bg-gray-200 hover:shadow-xl lg:w-80 '>
                 <Link to={`/budget/${data?._id}`} className='block h-full'>
                     <div className='py-3 px-3 h-full space-y-1'>
-                        <div className='flex justify-between items-center py-4'>
-                            <div className='size-12 rounded-full bg-red-400 overflow-hidden p-1'>
-                                <img src="#" alt="Budget Icon" className="object-cover w-full h-full" />
-                            </div>
+                        <div className='flex justify-between items-center py-6'>
                             <h1 className='text-lg font-semibold capitalize'>{data?.name}</h1>
                             <h1 className='text-lg font-semibold'>${data?.amount}</h1>
                         </div>
-                        <div>
+                        <div className='space-y-4'>
                             <div className='flex justify-between text-sm px-3'>
-                                <p>{data?.count}</p>
+                                <p className='text-sm'>totalExpense:{data?.count}</p>
                                 <p className='text-sm'>Remaining:${ data?.amount-data?.totalExpense}</p>
                             </div>
 
                             <progress
                                 className="progress progress-success "
-                                value={(data?.count>0&&data?.amount-data?.totalExpense===0?data?.amount:data?.totalExpense)}
+                                value={(data?.totalExpense)}
+                                // value={(data?.count>0&&data?.amount-data?.totalExpense===0?data?.amount:data?.totalExpense)}
                                 max={data?.amount}
                                 >
                             </progress>

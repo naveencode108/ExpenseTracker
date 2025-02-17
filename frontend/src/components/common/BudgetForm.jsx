@@ -21,14 +21,13 @@ const BudgetForm = ({ type, cardData, onClose }) => {
     const onSubmit = async (data) => {
         if (type === 'ADD') {
             let res = await createBudget(data);
-            try {
                 if (res?.data?.success) {
                     dispatch(setBudget([...budgetData, res.data.data]));
                     toast.success(res.data.message);
                     onClose();
                 }
-            } catch (er) {
-                toast.error(res.message );
+            else{
+                toast.error(res?.message);
             }
         }
         else if (type === 'EDIT') {
@@ -40,16 +39,15 @@ const BudgetForm = ({ type, cardData, onClose }) => {
                 formData.amount = data.amount;
             }
             let res = await updateBudget(cardData._id, formData);
-            try {
                 if (res?.data?.success) {
                     let update = budgetData.map(item => item._id == res.data.data._id ? { ...res.data.data } : item);
                     dispatch(setBudget(update));
                     toast.success(res.data.message);
                     onClose();
                 }
-            } catch (er) {
-                toast.error(res?.message);
-            }
+                else{
+                    toast.error(res?.message);
+                }
         }
     };
 
